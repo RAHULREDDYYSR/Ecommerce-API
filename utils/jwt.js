@@ -6,15 +6,7 @@ export const createJWT = ({payload}) =>{
 }
 
 
-export const isTokenValid = ({token})=>{
-    try {
-         JsonWebTokenError.verify(token,process.env.JWT_SECRET);
-    } catch (error) {
-        console.log(error);
-        
-    }
-   
-}
+export const isTokenValid = ({token})=> jwt.verify(token, process.env.JWT_SECRET)
 
 export const attachCookiesToRequest = ({res, user})=>{
     const token = createJWT({payload:user})
