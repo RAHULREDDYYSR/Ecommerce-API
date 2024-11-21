@@ -18,7 +18,7 @@ export const getAllProducts = async (req, res)=>{
 
 export const getSingleProduct = async (req, res)=>{
     const {id : productId} = req.params
-    const product = await Product.findOne({_id: productId})
+    const product = await Product.findOne({_id: productId}).populate('reviews')
     if(!product) {
         throw new CustomError.NotFoundError('Product not found')
     }
@@ -39,10 +39,11 @@ export const updateProduct = async (req, res)=>{
 
 export const deleteProduct = async (req, res)=>{
     const {id : productId} = req.params
-    const product = await Product.findOneAndDelete({_id: productId})
+    const product = await Product.findOne({_id: productId})
     if(!product) {
         throw new CustomError.NotFoundError('Product not found')
     }
+    await product.deleteOne()
     res.status(StatusCodes.OK).json({msg:'Product deleted successfully'})
 }
 

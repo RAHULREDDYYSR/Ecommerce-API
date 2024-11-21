@@ -28,7 +28,7 @@ export const getAllReviews = async (req, res) =>{
     const review = await Review.find({})
     .populate({path:'product',select:'name company price '})
     // .populate({path:'user',select:'name'})
-    res.status(StatusCodes.OK).json({review})
+    res.status(StatusCodes.OK).json({review,count:review.length})
 }
 
 export const getSingleReview = async (req, res) =>{
@@ -65,6 +65,15 @@ export const deleteReview = async (req, res) =>{
     }
     checkPermissions(req.user, review.user)
     //find one and delete
-    const result = await Review.findOneAndDelete({ _id: reviewId})
+    // const result = await Review.findOneAndDelete({ _id: reviewId})
+    await review.deleteOne();
+ 
     res.status(StatusCodes.OK).json({msg: 'Review deleted successfully'})
+}
+
+
+export const getSingleProductReviews = async (req, res) =>{
+    const {id : reviewId} = req.params
+    const reviews = await Review.find({product: reviewId})
+    res.status(StatusCodes.OK).json({reviews,count:reviews.length})
 }
