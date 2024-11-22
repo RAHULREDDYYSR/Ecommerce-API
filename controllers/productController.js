@@ -27,6 +27,7 @@ export const getSingleProduct = async (req, res)=>{
 
 
 export const updateProduct = async (req, res)=>{
+    
     const {id : productId} = req.params
     const product = await Product.findOneAndUpdate({_id:productId},
         req.body, {new: true, runValidators: true})
@@ -65,5 +66,6 @@ export const uploadImage = async (req, res)=>{
     const imagePath = path.join(process.cwd(),'./public/uploads/' + `${productImage.name}`)
     await productImage.mv(imagePath)
     res.status(StatusCodes.OK).json({image: `/upload/${productImage.name}`})
+    //console.log
 }
 
